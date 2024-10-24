@@ -8,6 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
+import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Scheduler;
@@ -16,6 +20,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
+    private MainViewModel mainViewModel;
+    private static final String TAG = "MainActivity";
 
 //    private final String URL1 = "https://api.kinopoisk.dev/v1.4/movie?token=MA3VDVZ-8ZX4FG3-P4YV9G2-EQ4KK7B&page=1&limit=10&sortField=rating.kp&sortType=-1&rating.kp=7-10";
 
@@ -25,19 +31,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ApiFactory.apiService.loadMovies()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<MovieResponce>() {
-                    @Override
-                    public void accept(MovieResponce movieResponce) throws Throwable {
-                        Log.d("MainActivity", movieResponce.toString());
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Throwable {
-                        Log.d("MainActivity", throwable.toString());
-                    }
-                });
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        mainViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(List<Movie> movies) {
+                Log.d(TAG, movies.toString());
+            }
+        });
+        mainViewModel.loadMovies();
     }
 }
