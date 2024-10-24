@@ -1,0 +1,58 @@
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+android {
+    namespace 'ru.wizand.moviesapp'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "ru.wizand.moviesapp"
+        minSdk 29
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    def room_version = "2.6.1"
+
+    implementation libs.androidx.room.runtime
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    // optional - RxJava3 support for Room
+    implementation libs.androidx.room.rxjava3
+    // optional - Paging 3 Integration
+    implementation libs.room.paging
+
+    implementation libs.glide
+
+    implementation libs.retrofit
+    implementation libs.converter.gson
+    implementation libs.adapter.rxjava3
+
+    implementation libs.rxandroid
+    implementation libs.rxjava3
+
+    implementation libs.appcompat
+    implementation libs.material
+    implementation libs.activity
+    implementation libs.constraintlayout
+    testImplementation libs.junit
+    androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.espresso.core
+}
