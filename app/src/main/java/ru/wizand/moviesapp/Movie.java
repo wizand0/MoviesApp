@@ -55,6 +55,9 @@ public class Movie {
     }
 
     public Poster getPoster() {
+        if (poster == null) {
+            poster = new Poster("");
+        }
         return poster;
     }
 

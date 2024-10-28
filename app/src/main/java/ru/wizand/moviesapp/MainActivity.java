@@ -2,6 +2,8 @@ package ru.wizand.moviesapp;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +12,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
@@ -23,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel mainViewModel;
     private static final String TAG = "MainActivity";
 
+    private RecyclerView recyclerViewMovies;
+    private ProgressBar progressBarLoading;
+    private MoviesAdapter moviesAdapter;
+
 //    private final String URL1 = "https://api.kinopoisk.dev/v1.4/movie?token=MA3VDVZ-8ZX4FG3-P4YV9G2-EQ4KK7B&page=1&limit=10&sortField=rating.kp&sortType=-1&rating.kp=7-10";
 
 //    private final String URL = "https://api.kinopoisk.dev/v1.4/movie?token=MA3VDVZ-8ZX4FG3-P4YV9G2-EQ4KK7B&page=1&limit=10&sortField=rating.kp&sortType=-1&sortField=votes.kp&sortType=-1&releaseYears.start=2013-2024&rating.kp=7-10";
@@ -30,14 +38,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        recyclerViewMovies = findViewById(R.id.recyclerViewMovies);
+        progressBarLoading = findViewById(R.id.progressBarLoading);
+        moviesAdapter = new MoviesAdapter();
+
+        recyclerViewMovies.setAdapter(moviesAdapter);
+        recyclerViewMovies.setLayoutManager(new GridLayoutManager(this, 2));
 
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         mainViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(List<Movie> movies) {
-                Log.d(TAG, movies.toString());
+                moviesAdapter.setMovies(movies);
             }
         });
-        mainViewModel.loadMovies();
+        mainViewModel.getIsLoading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isLoading) {
+                if (isLoading) {
+                    progressBarLoading.setVisibility(View.VISIBLE);
+                } else {
+                    progressBarLoading.setVisibility(View.GONE);
+                }
+
+            }
+        });
+
+//        mainViewModel.loadFilms();
+
+        moviesAdapter.setOnReachEndListener(new MoviesAdapter.OnReachEndListener() {
+            @Override
+            public void onReachEnd() {
+                mainViewModel.loadMovies();
+            }
+        });
     }
 }
