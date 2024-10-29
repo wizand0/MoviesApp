@@ -52,13 +52,5 @@
             android:padding="8dp"
             tools:text="Description of movie"
             />
-
-
-
-
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </ScrollView>
