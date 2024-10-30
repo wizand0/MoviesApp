@@ -2,6 +2,7 @@ package ru.wizand.moviesapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -40,6 +42,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private RecyclerView recyclerViewReviews;
     private TrailersAdapter trailersAdapter;
     private ReviewsAdapter reviewsAdapter;
+    private ImageView imageViewStar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +88,22 @@ public class MovieDetailActivity extends AppCompatActivity {
             }
         });
         viewModel.loadReviews(movie.getId());
+        viewModel.getFavouriteMovie(movie.getId()).observe(this, new Observer<Movie>() {
+
+            Drawable starOff = ContextCompat.getDrawable(MovieDetailActivity.this, android.R.drawable.star_big_off);
+            Drawable starOn = ContextCompat.getDrawable(MovieDetailActivity.this, android.R.drawable.star_big_on);
+
+            @Override
+            public void onChanged(Movie movieFromDb) {
+                if (movieFromDb == null) {
+
+                    imageViewStar.setImageDrawable(starOff);
+                } else {
+
+                    imageViewStar.setImageDrawable(starOn);
+                }
+            }
+        });
 
     }
 
@@ -95,6 +114,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         textViewDescription = findViewById(R.id.textViewDescription);
         recyclerViewTrailers = findViewById(R.id.recyclerViewTrailers);
         recyclerViewReviews = findViewById(R.id.recyclerViewReviews);
+        imageViewStar = findViewById(R.id.imageViewStar);
     }
 
     public static Intent newIntent(Context context, Movie movie) {
