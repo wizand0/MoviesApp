@@ -1,5 +1,6 @@
 package ru.wizand.moviesapp;
 
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -20,7 +21,9 @@ public class Movie implements Serializable {
     @SerializedName("year")
     private int year;
     @SerializedName("poster")
+    @Embedded
     private Poster poster;
+    @Embedded
     @SerializedName("rating")
     private Rating rating;
 
