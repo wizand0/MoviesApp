@@ -68,6 +68,20 @@ public class MovieDetailViewModel extends AndroidViewModel {
         compositeDisposable.add(disposable);
     }
 
+    public void insertMovie(Movie movie) {
+        Disposable disposable = movieDao.insertMovie(movie)
+                .subscribeOn(Schedulers.io())
+                .subscribe();
+        compositeDisposable.add(disposable);
+    }
+
+    public void removeMovie(int movieId) {
+        Disposable disposable = movieDao.removeMovie(movieId)
+                .subscribeOn(Schedulers.io())
+                .subscribe();
+        compositeDisposable.add(disposable);
+    }
+
     public void loadTrailers(int id) {
         Disposable disposable = ApiFactory.apiService.loadTrailers(id)
                 .subscribeOn(Schedulers.io())
