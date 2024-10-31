@@ -36,9 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBarLoading;
     private MoviesAdapter moviesAdapter;
 
-//    private final String URL1 = "https://api.kinopoisk.dev/v1.4/movie?token=MA3VDVZ-8ZX4FG3-P4YV9G2-EQ4KK7B&page=1&limit=10&sortField=rating.kp&sortType=-1&rating.kp=7-10";
-
-//    private final String URL = "https://api.kinopoisk.dev/v1.4/movie?token=MA3VDVZ-8ZX4FG3-P4YV9G2-EQ4KK7B&page=1&limit=10&sortField=rating.kp&sortType=-1&sortField=votes.kp&sortType=-1&releaseYears.start=2013-2024&rating.kp=7-10";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
